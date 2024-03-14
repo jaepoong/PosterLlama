@@ -1,4 +1,4 @@
 # PosterLlama
 
 # Unconditional Generated Output
-![image](asset/generated_samples.png)
+<img src = "asset/generated_samples.png" width="50%" height="50%">
