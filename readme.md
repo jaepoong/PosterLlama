@@ -1,8 +1,10 @@
 # PosterLlama
 
 # Unconditional Generated Output
-<img src = "./generated_samples.png" width="50%" height="50%">
-Setup:
+<img src = "./asset/generated_samples.png" width="50%" height="50%">
+
+
+# Setup
 ```bash
 conda create -n PosterLlama python==3.9
 conda activate PosterLlama
