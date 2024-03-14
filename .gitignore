@@ -1,0 +1,9 @@
+data/*
+log_dir/*
+output/*
+models/*
+
+*__pycache__*
+
+
+*my.txt*
