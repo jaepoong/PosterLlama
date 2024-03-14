@@ -1,12 +1,4 @@
 # PosterLlama
 
 # Unconditional Generated Output
-
-
-
-## Software Installation
-
-Install dependency:
-```bash
-
-```
+![image](asset/generated_samples.png)
