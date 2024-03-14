@@ -98,14 +98,6 @@ class Trainer:
             self.global_step = last_epoch * self.num_update_steps_per_epoch
             self.first_epoch = last_epoch
             self.resume_step = 0
-       
-        """
-        ## 실험용
-        save_path = self.conf.ckpt_dir / f"checkpoint-{0}/"
-        # delete folder if we have already 5 checkpoints
-        self.accelerator.save_state(save_path)
-        self.model.module.save_pretrained(save_path)
-        LOG.info(f"Saving checkpoint to {save_path}")"""
         
     def init_optimizer(self, model):
         p_wd, p_non_wd = [], []
@@ -223,13 +215,3 @@ class Trainer:
         self.model.train()
             
         self.accelerator.wait_for_everyone()
-
-#[6] NVIDIA A100 80GB PCIe | 57°C,  99 % | 65276 / 81920 MB | poong(65274M)  32 batch 4
-#[7] NVIDIA A100 80GB PCIe | 41°C, 100 % | 65448 / 81920 MB | poong(65446M)
-
-
-#[6] NVIDIA A100 80GB PCIe | 56°C,   0 % | 66440 / 81920 MB | poong(66438M)  64 batch 4
-#[7] NVIDIA A100 80GB PCIe | 40°C, 100 % | 66204 / 81920 MB | poong(66202M)
-
-#[6] NVIDIA A100 80GB PCIe | 54°C,  99 % | 69424 / 81920 MB | poong(69422M) 128 batch 4
-#[7] NVIDIA A100 80GB PCIe | 43°C, 100 % | 69468 / 81920 MB | poong(69466M)

@@ -23,11 +23,11 @@ from PIL import Image, ImageDraw
 import copy
 
 DATASET_COLOR = {
-    1: "#FF0000",       # 빨
-    2: "#FFA500",       # 주
-    3: "#FFFF00",       # 노
-    4: "#008000",       # 초
-    5: "#0000FF"        # 파
+    1: "#FF0000",   
+    2: "#FFA500",   
+    3: "#FFFF00",   
+    4: "#008000",   
+    5: "#0000FF"    
 }
 int_to_lable = DATASET_META.get("cgl")
 label_to_int = dict([(v, k) for k, v in int_to_lable.items()])

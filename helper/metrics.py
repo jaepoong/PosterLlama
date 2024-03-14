@@ -186,14 +186,14 @@ def compute_iou(
 
     l1, t1, r1, b1 = convert_xywh_to_ltrb(box_1.T) # x1,y1,x2,y2
     l2, t2, r2, b2 = convert_xywh_to_ltrb(box_2.T)
-    a1, a2 = (r1 - l1) * (b1 - t1), (r2 - l2) * (b2 - t2) #넓이 
+    a1, a2 = (r1 - l1) * (b1 - t1), (r2 - l2) * (b2 - t2)
 
     # intersection
     l_max = lib.maximum(l1, l2)
     r_min = lib.minimum(r1, r2) 
     t_max = lib.maximum(t1, t2) 
     b_min = lib.minimum(b1, b2) 
-    cond = (l_max < r_min) & (t_max < b_min) #
+    cond = (l_max < r_min) & (t_max < b_min) 
     ai = lib.where(cond, (r_min - l_max) * (b_min - t_max), lib.zeros_like(a1[0]))
 
     au = a1 + a2 - ai 
@@ -362,8 +362,6 @@ def __compute_average_iou(layout: Layout, perceptual: bool = False) -> float:
     else:
         return 0.0
 
-#real_iou: {'average_iou-BLT': 0.10187643446728879, 'average_iou-VTN': 0.3234436461461616}
-#generated_iou {'average_iou-BLT': 0.09618212747877632, 'average_iou-VTN': 0.3127967555964063}
 def compute_average_iou(
     layouts: List[Layout],
     disable_parallel: bool = DISABLED,
@@ -448,7 +446,7 @@ def __compute_docsim_between_two_layouts(
     ii, jj = linear_sum_assignment(scores, maximize=True)
 
     if len(scores[ii, jj]) == 0:
-        # sometimes, predicted bboxes are somehow filtered.
+
         return 0.0
     else:
         return scores[ii, jj].mean()

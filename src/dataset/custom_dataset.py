@@ -136,18 +136,3 @@ class RawFileDataset(Dataset):
         selected_types = random.choices(self.cond_type, self.sample_prob, k=1)  # joint loss (t=2 here)
         instance = instances[selected_types[0]]
         return instance
-
-        
-"""
-"completion": {
-    "input": instruct_6.strip(),
-    "labels": answer_6.strip(),
-    "image" : img,
-    "name" : name
-}, 
-"refinement": {
-    "input": instruct_7.strip(),
-    "labels": answer_7.strip(),
-    "image" : img,
-    "name" : name
-} """

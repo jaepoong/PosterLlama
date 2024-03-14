@@ -523,6 +523,3 @@ def main():
      
 if __name__ == "__main__":
     main()
-    
-#CUDA_VISIBLE_DEVICES=6,7 accelerate launch --num_processes=2 --gpu_ids="all" main.py --config src/common/configs_stage1_dino.py --workdir train_stage1_dino  >> log_dir/train_stage1_dino/log.txt 2>&1
-# CUDA_VISIBLE_DEVICES=2,5 accelerate launch --num_processes=2 --gpu_ids="all" main.py --config src/common/configs_stage1_dino_codellama.py --workdir train_stage1_dino_code_llama >> log_dir/train_stage1_dino_code_llama/log.txt 2>&1

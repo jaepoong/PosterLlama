@@ -9,7 +9,6 @@ def get_config():
     config = ml_collections.ConfigDict()
     config.log_dir = Path('log_dir')
     # Exp info
-    #config.dataset_path = Path("/nas2/lait/5000_Dataset/Image/PubLayNet/publaynet")
     config.train_json = "data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition_text/train_llama_numerical.jsonl"
     config.val_json = "data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition_text/val_llama_numerical.jsonl"
     config.train_img_path ="data/cgl_dataset/augment_cgl"

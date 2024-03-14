@@ -1,7 +1,6 @@
 import ml_collections
 import torch
 from path import Path
-# DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,5 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_code_llama_pku.py --workdir train_stage2_with_augment_dino_codellama_pku >> log_dir/train_stage2_with_augment_dino_codellama_pku/log.txt 2>&1 
 
 def get_config():
     """Gets the default hyperparameter configuration."""
@@ -9,7 +8,6 @@ def get_config():
     config = ml_collections.ConfigDict()
     config.log_dir = Path('log_dir')
     # Exp info
-    #config.dataset_path = Path("/nas2/lait/5000_Dataset/Image/PubLayNet/publaynet")
     config.train_json = "data/PKU_PosterLayout/for_posternuwa/html_format_img_instruct_all_mask_and_all_condition_aug/train_llama_numerical.jsonl"
     config.val_json = "data/PKU_PosterLayout/for_posternuwa/html_format_img_instruct_all_mask_and_all_condition_aug/val_llama_numerical.jsonl"
     config.train_img_path ="data/PKU_PosterLayout/train/pku_aug"

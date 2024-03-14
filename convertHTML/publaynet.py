@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/workspace/zecheng/layout-generation")
+
 import torch
 from pathlib import Path
 from pycocotools.coco import COCO

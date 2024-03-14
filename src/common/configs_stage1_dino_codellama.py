@@ -9,10 +9,10 @@ def get_config():
     config = ml_collections.ConfigDict()
     config.log_dir = Path('log_dir')
     # Exp info
-    config.train_img_path = ["/data1/poong/data/cc_sbu_laion/laion_dataset/{00000..10487}.tar",
-                             "/data1/poong/data/cc_sbu_laion/cc_sbu_dataset/{00000..01254}.tar"]
-    config.val_img_path = ["/data1/poong/data/cc_sbu_laion/laion_dataset/10488.tar",
-                           "/data1/poong/data/cc_sbu_laion/cc_sbu_dataset/01255.tar"]
+    config.train_img_path = ["data/cc_sbu_laion/laion_dataset/{00000..10487}.tar",
+                             "data/cc_sbu_laion/cc_sbu_dataset/{00000..01254}.tar"]
+    config.val_img_path = ["data/cc_sbu_laion/laion_dataset/10488.tar",
+                           "data/cc_sbu_laion/cc_sbu_dataset/01255.tar"]
     config.resume_from_checkpoint = None
 
     config.type = "stage1"
