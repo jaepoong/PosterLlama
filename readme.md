@@ -1,7 +1,7 @@
 # PosterLlama
 
 # Unconditional Generated Output
-<img src = "./asset/generated_samples.png" width="50%" height="50%">
+<img src = "asset/generated_samples.png" width="50%" height="50%">
 
 
 # Setup
@@ -12,7 +12,6 @@ conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=
 
 pip install requirments.txt
 ```
-
 
 ### Model Preparation
 We utilize [LLaMA2-7B-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) and [CodeLLaMA-7B](https://huggingface.co/codellama/CodeLlama-7b-hf) as our backbone.
