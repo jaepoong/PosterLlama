@@ -17,3 +17,6 @@ iopath
 opencv-python
 matplotlib
 sentencepiece
+colored
+coloredlogs
+path

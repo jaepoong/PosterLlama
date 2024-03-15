@@ -49,7 +49,7 @@ class RawFileDataset(Dataset):
             self.image_processor = AutoImageProcessor.from_pretrained("facebook/dinov2-base")
         
         self.vit_model_name = vit_model_name
-            
+        self.aug = aug
     def __len__(self):
         return len(self.content)
 
@@ -63,7 +63,7 @@ class RawFileDataset(Dataset):
         cond_recover_mask_seq_modeling = data["cond_recover_mask_seq_modeling"]
         completion_seq_modeling = data["completion_seq_modeling"]#
         refinement_seq_modeling = data["refinement_seq_modeling"]#
-        name = process_input(data["name"],aug=aug) # if list output random element, str output corresponding str
+        name = process_input(data["name"],aug=self.aug) # if list output random element, str output corresponding str
         
         if self.img_file_path :
             try: 
