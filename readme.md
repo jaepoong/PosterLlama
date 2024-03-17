@@ -25,6 +25,7 @@ For diverse training, you can choose more setup at ``./src/common/configs*.py``
 For first stage training, we use the filtered synthetic captions prepared by MiniGPT-4. For more detailes about the dataset, please refer to [MiniGPT-4](https://github.com/Vision-CAIR/MiniGPT-4/blob/main/dataset/README_1_STAGE.md)
 
 The final dataset structure is shown like this.
+After download, you must set config.train_img_path and config.val_img_path variable of configs_stage1*.py to the dataset path for training. 
 
 ```
 .
