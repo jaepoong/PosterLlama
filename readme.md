@@ -15,7 +15,10 @@ pip install requirments.txt
 
 ## Model Preparation
 We utilize [LLaMA2-7B-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) and [CodeLLaMA-7B](https://huggingface.co/codellama/CodeLlama-7b-hf) as our backbone.
-You can download the models and place them under the ``./models`` directory.\\
+You can download the models and place them under the ``./models`` directory.
+For training and test about our models, backbone weight is essentiable.
+
+
 Our pretrained Model of PosterLlama is here.: [PosterLlama](http) 
 
 
