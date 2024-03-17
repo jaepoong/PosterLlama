@@ -13,11 +13,17 @@ conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=
 pip install requirments.txt
 ```
 
-### Model Preparation
+## Model Preparation
 We utilize [LLaMA2-7B-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) and [CodeLLaMA-7B](https://huggingface.co/codellama/CodeLlama-7b-hf) as our backbone.
-You can download the models and place them under the ``./models`` directory.
+You can download the models and place them under the ``./models`` directory.\\
+Our pretrained Model of PosterLlama is here.: [PosterLlama](http) 
 
-# Training
+
+## Testing
+The 
+
+
+# Training & Preparing Dataset.
 Basic setting is about dino+code_llama model.
 For diverse training, you can choose more setup at ``./src/common/configs*.py``
 
@@ -25,7 +31,7 @@ For diverse training, you can choose more setup at ``./src/common/configs*.py``
 For first stage training, we use the filtered synthetic captions prepared by MiniGPT-4. For more detailes about the dataset, please refer to [MiniGPT-4](https://github.com/Vision-CAIR/MiniGPT-4/blob/main/dataset/README_1_STAGE.md)
 
 The final dataset structure is shown like this.
-After download, you must set config.train_img_path and config.val_img_path variable of configs_stage1*.py to the dataset path for training. 
+After download, you must set ``config.train_img_path`` and ``config.val_img_path`` variable of ``configs_stage1*.py`` to the dataset path for training. 
 
 ```
 .
