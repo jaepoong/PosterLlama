@@ -19,11 +19,11 @@ You can download the models and place them under the ``./models`` directory.
 For training and test about our models, backbone weight is essentiable.
 
 
-Our pretrained Model of PosterLlama is here.: [PosterLlama](http) 
+Our pretrained Model of PosterLlama is here : [PosterLlama](http) 
 
 
 ## Testing
-The 
+After download above weight, we can easily test PosterLlama models on ``test.ipynb``. Additional conditional generation task will be added soon.
 
 
 # Training & Preparing Dataset.
