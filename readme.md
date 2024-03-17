@@ -22,6 +22,11 @@ Basic setting is about dino+code_llama model.
 For diverse training, you can choose more setup at ``./src/common/configs*.py``
 
 ### First-Stage Training
+For first stage training, we use the filtered synthetic captions prepared by MiniGPT-4. For more detailes aobt hte dataset, please refer to [MiniGPT-4](https://github.com/Vision-CAIR/MiniGPT-4/blob/main/dataset/README_1_STAGE.md)
+--- | :---:
+CC3M+CC12M+SBU | <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/ccs_synthetic_filtered_large.json">Download</a>
+LAION115M |  <a href="https://storage.googleapis.com/sfr-vision-language-research/BLIP/datasets/laion_synthetic_filtered_large.json">Download</a>
+
 ```bash
 
  DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0 accelerate launch --num_processes=1 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_code_llama.py --workdir codellama
