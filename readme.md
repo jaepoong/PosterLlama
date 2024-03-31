@@ -73,10 +73,15 @@ CUDA_VISIBLE_DEVICES=2,5 accelerate launch --num_processes=2 --gpu_ids="all" mai
 - Download the [CGL-dataset](https://tianchi.aliyun.com/dataset/142692). Please use [LaMa](https://github.com/advimman/lama#inference-) to get clean images. 
 And you must set ``config.train_img_path`` and ``config.val_img_path`` variable of ``configs_stage2*.py`` to the dataset path for training. 
 
-- To make train dataset, make ``data/cgl_dataset/for_posternuwa/raw`` directory, and put downloaded ``layout_train_6w_fixed_v2.json`` as ``data/cgl_dataset/for_posternuwa/raw/train.json``
+- To make train dataset, make ``data/cgl_dataset/for_posternuwa/raw`` directory, and put downloaded ``layout_train_6w_fixed_v2.json`` as ``data/cgl_dataset/for_posternuwa/raw/train.json``. After that, implement below two code.
 ```bash
 python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-chat-hf  --dataset_name cgl --dataset_path data/cgl_dataset/for_posternuwa  --save_path data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition  --bbox_quantization code  --consistency_num 15  --add_task_instruction;
 ```
+```bash
+# build testing
+python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-chat-hf  --dataset_name cgl --dataset_path data/cgl_dataset/for_posternuwa  --save_path data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition  --bbox_quantization code  --consistency_num 15  --add_task_instruction --build_testing_set;
+```
+
 
 For second stage training, we utilize deepspeed stage-2. So before training, we recommend to setup the accelerate config.
 
