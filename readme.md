@@ -19,7 +19,7 @@ You can download the models and place them under the ``./models`` directory.
 For training and test about our models, backbone weight is essentiable.
 
 
-Our pretrained Model of PosterLlama is here : [PosterLlama](http) 
+Our pretrained Model of PosterLlama is here : [PosterLlama](http) (It will be released soon)
 
 
 ## Testing

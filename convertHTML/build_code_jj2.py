@@ -279,7 +279,7 @@ class CustomDataLoader(DataLoader):
                 
                 if self_consistency == True:  # random shuffle the condition, but stay with the target
                     shuffle_lst = [i for i in range(len(html_content))]
-                    min_shuffle_num = min(len(shuffle_lst), consistency_num) # min(gt contents개수, consistency num)
+                    min_shuffle_num = min(len(shuffle_lst), consistency_num) 
                     
                     def shuffle_list(input_list):  
                         random.shuffle(input_list)  

@@ -115,9 +115,7 @@ class LayoutNet(nn.Module):
         b = self.fc_bbox(bbox)
         if label_idx_replace_2: # PKU
             label[label==2] = 3 # 'Logo' -> 'PICTOGRAM'
-            #label[label==4] = 3 # 'Embellishment' -> 'PICTOGRAM'
             label[label==3] = 444 # 'Underlay' -> 'BUTTON'
-            #label[label==5] = 2 # 'Highlighted text' -> 'TEXT'
             label[label==444] = 4 # 'Underlay' -> 'BUTTON'
             label[label==1] = 2 # 'Text' -> 'TEXT'  
         else: #CGL

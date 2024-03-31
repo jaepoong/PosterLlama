@@ -140,7 +140,7 @@ if __name__=="__main__":
         generated_ids = blip_model.generate(**inputs)
         caption_orig = blip_processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         # make generation text
-        prompt = "please generate " + caption_orig + " in advertisement poster design without text"
+        prompt = "please generate " + caption_orig + " in colorful advertisement poster design without text"
         # estimate depth
         depth_image = get_depth_map(orig_image,depth_estimator,feature_extractor)
 
