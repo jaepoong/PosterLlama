@@ -85,10 +85,10 @@ python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-ch
 
 ### Build Training
 For second stage training, we utilize deepspeed stage-2. So before training, we recommend to setup the accelerate config.
-You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_code_llama.py`` to ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/train_llama_numerical.jsonl`` and ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/val_llama_numerical.jsonl``. \\
+You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_codellama.py`` to ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/train_llama_numerical.jsonl`` and ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/val_llama_numerical.jsonl``. \\
 After them  build below code.
 ```bash
 
- DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_code_llama.py --workdir train_stage2_with_augment_dino_codellama
+ DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dinocode_llama.py --workdir train_stage2_with_augment_dino_codellama
 
 ```
