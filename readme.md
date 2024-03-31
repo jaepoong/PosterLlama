@@ -89,6 +89,6 @@ You must set ``config.train_json`` and ``config.val_json`` variable of ``src/com
 After them  build below code.
 ```bash
 
- DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dinocode_llama.py --workdir train_stage2_with_augment_dino_codellama
+ DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_codellama.py --workdir train_stage2_with_augment_dino_codellama
 
 ```
