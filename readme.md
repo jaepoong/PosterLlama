@@ -69,7 +69,7 @@ CUDA_VISIBLE_DEVICES=2,5 accelerate launch --num_processes=2 --gpu_ids="all" mai
 
 ## Second-Stage Training
 
-### Training Data
+### Training Dataset Setting
 - Download the [CGL-dataset](https://tianchi.aliyun.com/dataset/142692). Please use [LaMa](https://github.com/advimman/lama#inference-) to get clean images. 
 And you must set ``config.train_img_path`` and ``config.val_img_path`` variable of ``configs_stage2*.py`` to the dataset path for training. 
 
@@ -83,8 +83,9 @@ python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-ch
 ```
 
 
+### Build Training
 For second stage training, we utilize deepspeed stage-2. So before training, we recommend to setup the accelerate config.
-
+You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_code_llama.py`` to ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/train_llama_numerical.jsonl`` and ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/val_llama_numerical.jsonl``. 
 ```bash
 
  DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_code_llama.py --workdir train_stage2_with_augment_dino_codellama
