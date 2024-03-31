@@ -1,8 +1,7 @@
 # PosterLlama
 
 # Unconditional Generated Output
-<img src = "asset/generated_samples.png" width="50%" height="50%"/>
-
+<img src = "./generated_samples.png" width="50%" height="50%"/>
 
 # Setup
 ```bash
