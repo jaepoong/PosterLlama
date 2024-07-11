@@ -1,8 +1,31 @@
-# PosterLlama
+# PosterLlama: Bridging Design Ability of Language Model to Content-Aware Layout Generation
 
-# Unconditional Generated Output
-<img src = "./generated_samples.png" width="50%" height="50%"/>
+Authors : Jaejung Seol, SeoJun Kim, [Jaejun Yoo](https://scholar.google.co.kr/citations?hl=en&user=7NBlQw4AAAAJ)
 
+## 📌 News 📌
+[2024.07.02] - 🎊 **PosterLlama** has been accepted by ECCV 2024! 🎊
+
+## Abstract
+> Visual layout plays a critical role in graphic design fields such as advertising, posters, and web UI design.  
+The recent trend towards content-aware layout generation through generative models has shown promise, yet it often overlooks the semantic intricacies of layout design by treating it as a simple numerical optimization. 
+To bridge this gap, we introduce PosterLlama, a network designed for generating visually and textually coherent layouts by reformatting layout elements into HTML code and leveraging the rich design knowledge embedded within language models. 
+Furthermore, we enhance the robustness of our model with a unique depth-based poster augmentation strategy. This ensures our generated layouts remain semantically rich but also visually appealing, even with limited data. 
+Our extensive evaluations across several benchmarks demonstrate that PosterLlama outperforms existing methods in producing authentic and content-aware layouts. It supports an unparalleled range of conditions, including but not limited to content-aware layout generation, element conditional layout generation, and layout completion, among others, serving as a highly versatile user manipulation tool.
+
+## Overview of PosterLlama
+
+<img src = "./asset/PosterLlama_Overview.png" width="100%" height="100%"/>
+
+## Examples
+<img src = "./asset/Conditional_Generation.png" width="80%" height="80%"/> 
+
+<details>
+<summary>Demo Samples</summary>
+<img src = "./asset/generated_samples.png" width="70%" height="70%"/>
+</details>
+
+<br/>
+  
 # Setup
 ```bash
 conda create -n PosterLlama python==3.9
@@ -15,14 +38,16 @@ pip install requirments.txt
 ## Model Preparation
 We utilize [LLaMA2-7B-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) and [CodeLLaMA-7B](https://huggingface.co/codellama/CodeLlama-7b-hf) as our backbone.
 You can download the models and place them under the ``./models`` directory.
-For training and test about our models, backbone weight is essentiable.
+For training and test about our models, backbone weight is essentiable in current version of code.
 
 
-Our pretrained Model of PosterLlama is here : [PosterLlama](http), (It will be released soon)
+Our pretrained Model of PosterLlama is here : [PosterLlama](https://huggingface.co/poong/PosterLlama/tree/main)
 
 
-## Testing
-After download above weight, we can easily test PosterLlama models on ``test.ipynb``. Additional conditional generation task will be added soon.
+## Demo
+After download above weight, we can easily test PosterLlama models on ``demo.ipynb``. 
+You just set the path of downloaded ``pytorch_model.bin`` following demo instruction.
+Additional conditional generation task will be added soon.
 
 
 # Training & Preparing Dataset.
@@ -91,3 +116,11 @@ After them  build below code.
  DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_codellama.py --workdir train_stage2_with_augment_dino_codellama
 
 ```
+
+
+## Acknowledgement
+We appreciate the open source of the following projects:
+
+[Hugging Face](https://github.com/huggingface) &#8194;
+[LayoutNUWA](https://github.com/ProjectNUWA/LayoutNUWA) &#8194;
+[MiniGPT-4](https://github.com/Vision-CAIR/MiniGPT-4) &#8194; 
