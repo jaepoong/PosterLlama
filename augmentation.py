@@ -15,7 +15,9 @@ from diffusers import ControlNetModel, StableDiffusionXLControlNetImg2ImgPipelin
 from diffusers.utils import load_image
 
 from torchvision import transforms
-from torchmetrics.multimodal.clip_score import CLIPScore
+#from torchmetrics.multimodal.clip_score import CLIPScore
+from dreamsim import dreamsim
+
 import os
 import copy
 from dataclasses import dataclass
@@ -23,12 +25,16 @@ import tyro
 from tqdm import tqdm
 
 def concatenate_images(images: List[Image.Image]) -> Image.Image:
+    # 이미지 크기 가져오기
     widths, heights = zip(*(img.size for img in images))
 
+    # 총 가로 너비 계산
     total_width = sum(widths)
 
+    # 새로운 이미지 생성
     result_image = Image.new("RGB", (total_width, heights[0]))
 
+    # 이미지 이어붙이기
     x_offset = 0
     for img in images:
         result_image.paste(img, (x_offset, 0))
@@ -36,8 +42,8 @@ def concatenate_images(images: List[Image.Image]) -> Image.Image:
 
     return result_image
 
-def get_depth_map(image,depth_estimator,feature_extractor):
-    image = feature_extractor(images=image, return_tensors="pt").pixel_values.to("cuda")
+def get_depth_map(image,depth_estimator,feature_extractor,device):
+    image = feature_extractor(images=image, return_tensors="pt").pixel_values.to(device)
     with torch.no_grad(), torch.autocast("cuda"):
         depth_map = depth_estimator(image).predicted_depth
 
@@ -57,7 +63,7 @@ def get_depth_map(image,depth_estimator,feature_extractor):
 
 @dataclass
 class Args:
-    file_path : str = "data/cgl_dataset/for_posternuwa/raw/train.json"
+    file_path : str = "data/cgl_dataset/layout_train_6w_fixed_v2.json"
     
     img_path : str = "data/cgl_dataset/cgl_inpainting_all"
     
@@ -65,16 +71,17 @@ class Args:
     
     aug_num : int =3
     
-    aug_save_path = "data/cgl_dataset/augment_cgl"
+    aug_save_path = "data/cgl_dataset/sam"
     
     quarter : int = 0
     
-    device : int = 0
+    device : int = 7
 
 
 if __name__=="__main__":
     args = tyro.cli(Args)
-    device = f"cuda:{args.device}" if torch.cuda.is_available() else "cpu"
+    #os.environ['CUDA_VISIBLE_DEVICES'] = str(args.device)
+    device = f"cuda" if torch.cuda.is_available() else "cpu"
     
     # Depth estimation
     depth_estimator = DPTForDepthEstimation.from_pretrained("Intel/dpt-hybrid-midas").to(device)
@@ -91,7 +98,7 @@ if __name__=="__main__":
         variant="fp16",
         use_safetensors=True,
         torch_dtype=torch.float16,
-    ).to("cuda")
+    ).to(device)
     vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix", torch_dtype=torch.float16).to(device)
     pipe = StableDiffusionXLControlNetImg2ImgPipeline.from_pretrained(
         "stabilityai/stable-diffusion-xl-base-1.0",
@@ -100,12 +107,14 @@ if __name__=="__main__":
         variant="fp16",
         use_safetensors=True,
         torch_dtype=torch.float16,
-    ).to(device)
+        device = args.device
+    )#.to(device)
     pipe.enable_model_cpu_offload()
     controlnet_conditioning_scale = 0.5
     # clip operator
     to_tensor = transforms.ToTensor()
-    metric = CLIPScore(model_name_or_path="openai/clip-vit-base-patch16").to(device)
+    #metric = CLIPScore(model_name_or_path="openai/clip-vit-base-patch16").to(device)
+    model, preprocess = dreamsim(pretrained=True,cache_dir=".cache") 
     
     
     with open(args.file_path, "r") as f:
@@ -120,13 +129,13 @@ if __name__=="__main__":
     os.makedirs(args.aug_save_path,exist_ok=True)
     # augment dataset
     total = len(content["images"])
-    quarter = total//4
-    start = quarter *args.quarter
-    end = min((quarter)*(args.quarter+1), total)
-    progress_bar = tqdm(total = quarter, desc = f"quarter : {args.quarter}")
-    print(f"start : {start}   end : {end}")
-    #for i in range(len(content["images"])):
-    for i in range(start,end):
+    #quarter = total//4
+    #start = quarter *args.quarter
+    #end = min((quarter)*(args.quarter+1), total)
+    progress_bar = tqdm(total = total)
+    #print(f"start : {start}   end : {end}")
+    for i in range(len(content["images"])):
+    #for i in range(total):
         samples = []
         aug_score = []
         
@@ -140,9 +149,9 @@ if __name__=="__main__":
         generated_ids = blip_model.generate(**inputs)
         caption_orig = blip_processor.batch_decode(generated_ids, skip_special_tokens=True)[0].strip()
         # make generation text
-        prompt = "please generate " + caption_orig + " in colorful advertisement poster design without text"
+        prompt = "please generate " + caption_orig + " in advertisement poster design without any text description."
         # estimate depth
-        depth_image = get_depth_map(orig_image,depth_estimator,feature_extractor)
+        depth_image = get_depth_map(orig_image,depth_estimator,feature_extractor,device)
 
         # controllnet estimation
         generated_image = pipe(
@@ -154,29 +163,13 @@ if __name__=="__main__":
             controlnet_conditioning_scale=controlnet_conditioning_scale,
         ).images
         
-        # resizing
-        #generated_image = generated_image.resize(size)
-        #depth_image = depth_image.resize(size)
-        # text description of generated image
-        inputs = blip_processor(images=generated_image, return_tensors="pt").to(device, torch.float16)
-        generated_ids = blip_model.generate(**inputs)
-        caption_generated = blip_processor.batch_decode(generated_ids, skip_special_tokens=True)
+        img1 = preprocess(orig_image)
+        for k in range(len(generated_image)):
+            img2 = preprocess(generated_image[k])
+            distance = model(img1.to(device),img2.to(device))
+            samples.append(generated_image[k])
+            aug_score.append(distance.item())
         
-        for k in range(len(caption_generated)):
-            #images =  concatenate_images([orig_image.resize(size),depth_image.resize(size),generated_image])
-            generated_values=metric(to_tensor(generated_image[k]).to(device), caption_orig)
-            orig_values=metric(to_tensor(orig_image).to(device), caption_orig)
-            samples.append(generated_image[k].resize(size))
-            aug_score.append(generated_values.item())
-        
-        # save interval samples
-        if i%100==0:
-            print("original_caption : " ,caption_orig)
-            print("generated_caption : ",caption_generated)
-            print("score of generated_image - caption_orig :",generated_values)
-            print("score of orig_image - caption_orig :",orig_values)
-            images = concatenate_images([orig_image.resize(size),depth_image.resize(size),generated_image[0].resize(size)])
-            images.save(f"data/cgl_dataset/test_sample/augment_sample/{i}.png")
         # match generated samples
         max_indices = sorted(range(len(aug_score)), key=lambda i: aug_score[i], reverse=True)[:args.aug_num]
         selected_images = [samples[i] for i in max_indices]
@@ -188,7 +181,7 @@ if __name__=="__main__":
         
         for j,selected_image in enumerate(selected_images):
             selected_save_path = content["images"][i]["file_name"].split(".")[0]+f"_aug{j}."+content["images"][i]["file_name"].split(".")[1]
-            selected_image.save(os.path.join(args.aug_save_path,selected_save_path))
+            selected_image.resize(size).save(os.path.join(args.aug_save_path,selected_save_path))
             #cont["annotations"].append(cont["annotations"][i])
             #samp = copy.deepcopy(content["images"][i])
             samp["file_name"].append(selected_save_path)
@@ -197,7 +190,7 @@ if __name__=="__main__":
         progress_bar.update(1)
     progress_bar.close()
             
-    save_path = args.file_path.split(".")[0]+f"_aug_step{args.quarter}."+args.file_path.split(".")[1]
+    save_path = args.file_path.split(".")[0]+f"_aug."+args.file_path.split(".")[1]
     with open(save_path,"w") as f:
         json.dump(cont,f,indent=2)
 
