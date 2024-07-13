@@ -1,7 +1,7 @@
 data/*
 log_dir/*
 output/*
-models/
+models/*
 !models/LayoutNet/layoutnet.pth.tar
 *__pycache__*
 
