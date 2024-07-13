@@ -4,7 +4,7 @@ output/*
 models/*
 !models/
 !models/.gitkeep
-
+!models/layoutnet.pth.tar
 *__pycache__*
 
 
