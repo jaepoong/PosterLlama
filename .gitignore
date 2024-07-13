@@ -3,7 +3,8 @@ log_dir/*
 output/*
 models/*
 !models/
-!models/LayoutNet/layoutnet.pth.tar
+!models/.gitkeep
+
 *__pycache__*
 
 
