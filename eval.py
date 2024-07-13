@@ -490,7 +490,7 @@ def main():
     
     cal_fid = True
     if cal_fid:
-        fid_model = LayoutFID("models/LayoutNet/layoutnet.pth.tar")
+        fid_model = LayoutFID("models/layoutnet.pth.tar")
         fid = cal_layout_fid(fid_model,boxes,boxes_gt,clses,clses_gt,pku=False)
         print("metric_layout_fid:",fid)
     txt_file = True
