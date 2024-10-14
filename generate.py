@@ -31,11 +31,11 @@ def split_string_by_delimiter(input_string, delimiter):
 
 # TODO customizing
 def main(
-    file_path: str = "/data1/poong/tjfwownd/PosterNUWA/data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/test_numerical.jsonl",
-    base_model: str = "/data1/poong/tjfwownd/PosterNUWA/log_dir/train_stage2_with_augment_dino_codellama_M/checkpoints/checkpoint-20/pytorch_model.bin",
+    file_path: str = "data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/test_numerical.jsonl",
+    base_model: str = "log_dir/train_stage2_with_augment_dino_codellama/checkpoints/checkpoint-16/pytorch_model.bin",
     device: int=1,
-    output_dir: str="/data1/poong/tjfwownd/PosterNUWA/log_dir/train_stage2_with_augment_dino_codellama_M",
-    checkpoint: str="20",
+    output_dir: str="log_dir/train_stage2_with_augment_dino_codellama",
+    checkpoint: str="16",
     max_new_tokens: int=1024,
     dino=True,
     code_llama = True,

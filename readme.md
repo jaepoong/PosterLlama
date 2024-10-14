@@ -94,10 +94,14 @@ CUDA_VISIBLE_DEVICES=2,5 accelerate launch --num_processes=2 --gpu_ids="all" mai
 ## Second-Stage Training
 
 ### Training Dataset Setting
+<details>
+<summary>Dataset Preparing(working and released soon) </summary>
+
 - Download the [CGL-dataset](https://tianchi.aliyun.com/dataset/142692). Please use [LaMa](https://github.com/advimman/lama#inference-) to get clean images. 
 And you must set ``config.train_img_path`` and ``config.val_img_path`` variable of ``configs_stage2*.py`` to the dataset path for training. 
 
-- To make train dataset, make ``data/cgl_dataset/for_posternuwa/raw`` directory, and put downloaded ``layout_train_6w_fixed_v2.json`` as ``data/cgl_dataset/for_posternuwa/raw/train.json``. After that, implement below two code.
+- To make train dataset, make ``data/cgl_dataset/for_posternuwa/raw`` directory, and put downloaded ``layout_train_6w_fixed_v2.json`` as ``data/cgl_dataset/for_posternuwa/raw/train.json``.
+
 ```bash
 python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-chat-hf  --dataset_name cgl --dataset_path data/cgl_dataset/for_posternuwa  --save_path data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition  --bbox_quantization code  --consistency_num 15  --add_task_instruction;
 ```
@@ -106,10 +110,18 @@ python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-ch
 python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-chat-hf  --dataset_name cgl --dataset_path data/cgl_dataset/for_posternuwa  --save_path data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition  --bbox_quantization code  --consistency_num 15  --add_task_instruction --build_testing_set;
 ```
 
+</details>
+
+- Preprocessed Dataset can be downloaded at [Dataset](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv?usp=sharing)
 
 ### Build Training
 For second stage training, we utilize deepspeed stage-2. So before training, we recommend to setup the accelerate config.
-You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_codellama.py`` to ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/train_llama_numerical.jsonl`` and ``data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/val_llama_numerical.jsonl``. \\
+
+You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_codellama.py`` to path of `` html_format_img_instruct_mask_all_condition/train_llama_numerical.jsonl`` and ``html_format_img_instruct_mask_all_condition/val_llama_numerical.jsonl``, which is downloaed on [processed_code.zip](https://drive.google.com/file/d/1lZz1DyRTKGo79xzOzMO56iKlzAEQUtvq/view?usp=sharing)
+
+And set ``config.train_img_path``, ``config._vall_img_path`` to path of downloaded [cgl_inpainting_all.zip](https://drive.google.com/file/d/1lZz1DyRTKGo79xzOzMO56iKlzAEQUtvq/view?usp=sharing)
+
+
 After them  build below code.
 ```bash
 
