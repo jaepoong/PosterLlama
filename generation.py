@@ -42,18 +42,6 @@ def build_input( canvas_width, canvas_height, vals) :
     prompt = random.choice(INSTRUCTION)
     str_output = f'{prompt} (in html format):\n###bbox html:  <body> <svg width=\"{canvas_width}\" height=\"{canvas_height}\">{rects} </svg> </body>'
     return str_output
-def sample_image(dataloader):
-    """
-        return :  PIL.Image, sample for model
-    """
-    sample = next(iter(dataloader))
-    sample['image']=sample['image'].to(device)
-    imgs=[]
-    for p in sample['name']:
-        img = Image.open(os.path.join("data/cgl_dataset/box_inpainintg_layout_cgl",p[:-4]+"_mask000.png"))
-        imgs.append(img)
-    return imgs[0], sample
-
 
 
 def inference_code(image,vals,model):

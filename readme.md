@@ -17,10 +17,11 @@ Our extensive evaluations across several benchmarks demonstrate that PosterLlama
 <img src = "./asset/PosterLlama_Overview.png" width="100%" height="100%"/>
 
 ## Examples
+### Conditional Generation
 <img src = "./asset/Conditional_Generation.png" width="80%" height="80%"/> 
 
 <details>
-<summary>Demo Samples</summary>
+<summary>Demo Generated Samples</summary>
 <img src = "./asset/generated_samples.png" width="70%" height="70%"/>
 </details>
 
@@ -90,6 +91,7 @@ After download dataset. Below is training script.
 CUDA_VISIBLE_DEVICES=2,5 accelerate launch --num_processes=2 --gpu_ids="all" main.py --config src/common/configs_stage1_dino_codellama.py --workdir train_stage1_dino_code_llama
 
 ```
+- 1st stage pretrained weight can be found on [Link](https://drive.google.com/file/d/1s0dBM7Kd3LDtT6MnMYxC4u8Pa6OH9-NN/view?usp=sharing)
 
 ## Second-Stage Training
 
@@ -112,14 +114,17 @@ python convertHTML/build_code_jj2.py   --model_path_or_name models/Llama-2-7b-ch
 
 </details>
 
-- Preprocessed Dataset can be downloaded at [Dataset](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv?usp=sharing)
+- All the preprocessed Dataset can be downloaded at [Dataset](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv?usp=sharing)
 
 ### Build Training
 For second stage training, we utilize deepspeed stage-2. So before training, we recommend to setup the accelerate config.
 
-You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_codellama.py`` to path of `` html_format_img_instruct_mask_all_condition/train_llama_numerical.jsonl`` and ``html_format_img_instruct_mask_all_condition/val_llama_numerical.jsonl``, which is downloaed on [processed_code.zip](https://drive.google.com/file/d/1lZz1DyRTKGo79xzOzMO56iKlzAEQUtvq/view?usp=sharing)
+You must set ``config.train_json`` and ``config.val_json`` variable of ``src/common/configs_stage2_stage2_dino_codellama.py`` to path of `` **/train_llama_numerical.jsonl`` and ``**/val_llama_numerical.jsonl``, which is downloaded on below link
+- PosterLlama-Text preprocessed Text dataset: [processed_code.zip](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv)
+- PosterLlama preprocessed dataset: [processed_code.zip](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv)
 
-And set ``config.train_img_path``, ``config._vall_img_path`` to path of downloaded [cgl_inpainting_all.zip](https://drive.google.com/file/d/1lZz1DyRTKGo79xzOzMO56iKlzAEQUtvq/view?usp=sharing)
+And set ``config.train_img_path``, ``config._val_img_path`` to path of unziped [cgl_inpainting_all.zip](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv). 
+
 
 
 After them  build below code.
@@ -128,6 +133,29 @@ After them  build below code.
  DS_SKIP_CUDA_CHECK=1 CUDA_VISIBLE_DEVICES=0,1 accelerate launch --num_processes=2 --gpu_ids='all'  main.py  --config src/common/configs_stage2_dino_codellama.py --workdir train_stage2_with_augment_dino_codellama
 
 ```
+
+### Sampling on Trained Model
+After training or downloading pretrained weight and data.
+You could generate images on test samples.
+Downloaded on [processed_code.zip](https://drive.google.com/drive/folders/1OK7O4h_JxaEVzm5Jlb2YrsKjwYmHfKNv)
+```
+python generate.py 
+--file_path=path_to_test_jsonl
+--base_model=path_to_model 
+--output_dir=log_dir 
+--img_dir=img_path
+
+```
+
+<details>
+<summary>example </summary>
+
+```
+python generate.py --file_path=data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/test_numerical.jsonl --base_model=log_dir/train_stage2_with_augment_dino_codellama/checkpoints/checkpoint-16/pytorch_model.bin --output_dir=log_dir/tes --img_dir=data/cgl_dataset/cgl_inpainting_all
+```
+
+</details>
+
 
 
 ## Acknowledgement

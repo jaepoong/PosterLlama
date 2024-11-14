@@ -33,9 +33,9 @@ def split_string_by_delimiter(input_string, delimiter):
 def main(
     file_path: str = "data/cgl_dataset/for_posternuwa/html_format_img_instruct_mask_all_condition/test_numerical.jsonl",
     base_model: str = "log_dir/train_stage2_with_augment_dino_codellama/checkpoints/checkpoint-16/pytorch_model.bin",
+    img_dir: str = "data/cgl_dataset/cgl_inpainting_all",
     device: int=1,
     output_dir: str="log_dir/train_stage2_with_augment_dino_codellama",
-    checkpoint: str="16",
     max_new_tokens: int=1024,
     dino=True,
     code_llama = True,
@@ -47,6 +47,9 @@ def main(
     
     assert file_path, (
         "Please specify a --file_path, e.g. --file_path='/path/to/json_file'"
+    )
+    assert img_dir, (
+        "Please specify a --img_dir, e.g. --file_path='/path/to/img_dir'"
     )
     
     assert device is not None, (
@@ -76,10 +79,10 @@ def main(
     model.load_state_dict(torch.load(base_model,map_location="cpu"))
     model = model.to(device)
     model.device = device
-    #model.half()
+
     model.eval()
 
-    def evaluate(
+    def generate(
         image,
         html_input,
         temperature=0.6,
@@ -91,7 +94,6 @@ def main(
         **kwargs,
     ):
 
-        # import pdb; pdb.set_trace()
         with torch.no_grad():
             with torch.autocast(device_type="cuda"):
                 generation_output = model.generate(image,html_input,max_new_tokens=max_new_tokens,temperature=temperature,top_p=top_p,do_sample=do_sample)
@@ -101,8 +103,8 @@ def main(
     with open(file_path, "r") as f:
         content = [json.loads(line) for line in f]
         
-    output_file = os.path.join(output_dir, "generated_sample",checkpoint)
-    sample_file = os.path.join(output_dir, "generated_sample",checkpoint,"samples")
+    output_file = os.path.join(output_dir, "generated_sample")
+    sample_file = os.path.join(output_dir, "generated_sample","samples")
     os.makedirs(output_file,exist_ok=True)
     os.makedirs(sample_file,exist_ok=True)
 
@@ -116,10 +118,10 @@ def main(
     with tqdm(total=len(content)) as pbar:
         for i,samples in enumerate(content):
             try:
-                img_path = os.path.join("data/cgl_dataset/cgl_inpainting_all",samples['name'][0][:-4]+".png")
+                img_path = os.path.join(img_dir,samples['name'][0][:-4]+".png")
                 image = Image.open(img_path)
             except:
-                img_path = os.path.join("data/cgl_dataset/cgl_inpainting_all",samples['name'][0][0][:-4]+".png")
+                img_path = os.path.join(img_dir,samples['name'][0][0][:-4]+".png")
                 image = Image.open(img_path)  
             
             sample_image = copy.deepcopy(image)
@@ -147,9 +149,9 @@ def main(
             img = image_processor(image)
             img_l = torch.stack([img]*len(instruct))
 
-            generated_sample = evaluate(img_l,instruct, max_new_tokens=max_new_tokens)
-            #cond_cate_size_to_pos = evaluate(img,cond_cate_size_to_pos, max_new_tokens=max_new_tokens)
-            #cond_recover_mask = evaluate(img,cond_recover_mask_input, max_new_tokens=max_new_tokens)
+            generated_sample = generate(img_l,instruct, max_new_tokens=max_new_tokens)
+            #cond_cate_size_to_pos = generate(img,cond_cate_size_to_pos, max_new_tokens=max_new_tokens)
+            #cond_recover_mask = generate(img,cond_recover_mask_input, max_new_tokens=max_new_tokens)
             
             res.append({
                 "cond_cate_to_size_pos": generated_sample[0],
